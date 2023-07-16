@@ -1,0 +1,34 @@
+name: Practice workflow action
+on: [push, workflow_dispatch]
+jobs:
+    lint_test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: getting code
+              uses: actions/checkout@v3
+            - name: setting up NodeJs
+              uses: actions/setup-node@v3
+              with:
+                node-version: 18
+            - name: installing dependencies
+              run: npm ci
+            - name: running lint
+              run: npm run lint
+            - name: running test
+              run: npm test
+    build:
+        needs: [lint_test]
+        runs-on: ubuntu-latest
+        steps:
+            - name: getting code
+              uses: actions/checkout@v3
+            - name: setting up NodeJs
+              uses: actions/setup-node@v3
+              with:
+                node-version: 18
+            - name: installing dependencies
+              run: npm ci
+            - name: Building app for deployment
+              run: npm run build
+            - name: deploying app
+              run: echo "deploying app....."
